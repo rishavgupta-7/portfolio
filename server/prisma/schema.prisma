@@ -1,0 +1,214 @@
+// Prisma schema for futuristic CMS-driven portfolio
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  name         String   @default("Rishav Gupta")
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Hero {
+  id               Int      @id @default(1)
+  name             String   @default("Rishav Gupta")
+  highlightedName  String   @default("Rishav")
+  title            String   @default("Full-Stack & Shopify Developer")
+  description      String   @default("Architecting high-performance web applications, modern headless commerce, and scalable digital solutions tailored for high-growth brands and enterprise clients.")
+  availabilityText String   @default("Available for freelance work")
+  location         String   @default("India")
+  remoteText       String   @default("Available for Remote Worldwide")
+  techLabels       String[] @default(["Full-Stack Development", "Shopify Plus", "React Ecosystem", "Node.js & APIs"])
+  primaryBtnText   String   @default("Start a Project")
+  primaryBtnUrl    String   @default("/contact")
+  secondaryBtnText String   @default("Explore Work")
+  secondaryBtnUrl  String   @default("/work")
+  clientProofText  String   @default("5.0 Rating • 100% Client Satisfaction")
+  heroImage        String   @default("/uploads/hero-developer.png")
+  bgImage          String?
+  updatedAt        DateTime @updatedAt
+}
+
+model HeroStat {
+  id       Int     @id @default(autoincrement())
+  value    String  // e.g. "10+"
+  label    String  // e.g. "Projects Completed"
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+}
+
+model Technology {
+  id              Int      @id @default(autoincrement())
+  name            String
+  category        String   @default("Core") // Frontend, Backend, Database, E-commerce, Tools & Others
+  logoUrl         String
+  position        String   @default("floating") // "top-left", "top-right", "bottom-left", "bottom-right", "center-right", "bottom-center"
+  animationDelay  Float    @default(0.0)
+  order           Int      @default(0)
+  isActive        Boolean  @default(true)
+  isHero          Boolean  @default(true)
+  version         String?  @default("latest")
+  description     String?
+  showInTerminal  Boolean  @default(false)
+  terminalVersion String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model TechEcosystem {
+  id                 Int      @id @default(1)
+  eyebrow            String   @default("SKILLS & TECHNOLOGIES")
+  heading            String   @default("My Tech Ecosystem")
+  subtitle           String   @default("Technologies I use to build modern and scalable applications.")
+  description        String   @default("A combination of modern tools, frameworks and best practices to build high-performance web applications and e-commerce solutions.")
+  buttonText         String   @default("View Full Stack →")
+  buttonUrl          String   @default("/stack")
+  terminalHeader     String   @default("~/rishav's dev --stack")
+  systemStatusText   String   @default("All Systems Operational")
+  systemStatusActive Boolean  @default(true)
+  updatedAt          DateTime @updatedAt
+}
+
+model ProcessStep {
+  id          Int      @id @default(autoincrement())
+  stepNumber  String   // "01", "02", "03", "04"
+  title       String   // "Discover", "Design", "Build", "Deploy"
+  description String   // Stage details
+  icon        String   @default("Search") // "Search", "FileText", "Code", "Rocket"
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ProcessSetting {
+  id          Int      @id @default(1)
+  eyebrow     String   @default("MY PROCESS")
+  heading     String   @default("How I Build")
+  description String   @default("A simple and transparent process to turn your ideas into a successful digital product.")
+  updatedAt   DateTime @updatedAt
+}
+
+
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  tagline     String?
+  description String
+  imageUrl    String
+  videoUrl    String?
+  media       String[] @default([])
+  category    String   @default("Full-Stack")
+  techStack   String[]
+  liveUrl     String?
+  githubUrl   String?
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Service {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  icon         String   @default("Code2")
+  technologies String[]
+  order        Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model About {
+  id              Int      @id @default(1)
+  heading         String   @default("Crafting Scalable Code & High-Conversion E-Commerce")
+  bio             String   @default("I am a passionate Full-Stack & Shopify developer with deep expertise in modern React/Vite ecosystems, Node.js RESTful architectures, and bespoke Liquid/Shopify Plus storefronts.")
+  profileImage    String?
+  resumeUrl       String?
+  location        String   @default("India • Remote Worldwide")
+  email           String   @default("rishav@example.com")
+  phone           String?
+  yearsExperience String   @default("2+")
+  updatedAt       DateTime @updatedAt
+}
+
+model Skill {
+  id       Int     @id @default(autoincrement())
+  name     String
+  level    Int     @default(90) // percentage
+  category String  @default("Frontend") // Frontend, Backend, E-commerce, Database/DevOps
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+}
+
+model Experience {
+  id           Int      @id @default(autoincrement())
+  role         String
+  company      String
+  location     String   @default("Remote")
+  startDate    String
+  endDate      String   @default("Present")
+  description  String
+  technologies String[]
+  order        Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+model Testimonial {
+  id         Int      @id @default(autoincrement())
+  clientName String
+  clientRole String
+  company    String
+  avatarUrl  String?
+  content    String
+  rating     Int      @default(5)
+  order      Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}
+
+model SocialLink {
+  id       Int     @id @default(autoincrement())
+  platform String
+  url      String
+  icon     String
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  id              Int      @id @default(1)
+  siteTitle       String   @default("Rishav Gupta | Full-Stack & Shopify Developer")
+  metaDescription String   @default("Portfolio of Rishav Gupta - Full-Stack Developer & Shopify Specialist delivering high-performance web applications.")
+  ogImage         String?
+  contactEmail    String   @default("rishav@example.com")
+  contactPhone    String?
+  footerText      String   @default("Engineered with React, Node.js & Prisma. All rights reserved.")
+  updatedAt       DateTime @updatedAt
+}
